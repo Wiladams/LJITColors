@@ -25,6 +25,14 @@ local function testColorNameMatch(pattern)
 	end
 end
 
+local function testNameMatch(pattern, dbname)
+	local found = colorman.matchColorByName(pattern, colorman.colordb[dbname], dbname)
+
+	for _, value in ipairs(found) do
+		printColorValue(value)
+	end
+end
+
 local function testColorByValue()
 	--local found = colorman.matchColorByValue({255,255,255}, colorman.colordb.sgi, "sgi")
 	--local found = colorman.matchColorByValue({127,70,80}, colorman.colordb.sgi, "sgi")
@@ -39,5 +47,6 @@ end
 --testColorNameMatch("white")
 --testColorNameMatch("vio")
 --testColorNameMatch("yellow")
+--testNameMatch("yellow", "crayola")
 testColorByValue()
 

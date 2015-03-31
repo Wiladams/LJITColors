@@ -2,6 +2,9 @@ LJITColors
 
 A Repository of routines related to dealing with colors.
 
+Some words on the subject
+https://williamaadams.wordpress.com/2015/03/31/ljitcolors-theres-a-name-for-that/
+
 allcolors.lua - A database of various colors
 **Crayola**
 **Hollasch**
