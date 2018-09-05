@@ -36,7 +36,7 @@ local function parseline(line)
 	return tonumber(n1), tonumber(n2), tonumber(n3), name
 end
 
-convertFile = function(filename)
+local function convertFile(filename)
 	for line in io.lines(filename) do
 		local red,green,blue,name = parseline(line)
 		name = name:lower()

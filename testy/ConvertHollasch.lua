@@ -20,8 +20,8 @@ limitations under the License.
 	antique_white     250   235   215   0.9804   0.9216   0.8431
 
 --]]
-ConvertHollaschFile = function(filename)
-	parseline = function(line)
+local function ConvertHollaschFile(filename)
+	local function parseline(line)
 		-- get name, strip whitespace
 		-- make lowercase
 		local name = line:sub(1,18)
@@ -55,5 +55,3 @@ ConvertHollaschFile = function(filename)
 end
 
 ConvertHollaschFile("./data/HollaschColors.txt")
-
---print(tonumber(nil))
