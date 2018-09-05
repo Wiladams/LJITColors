@@ -1,4 +1,6 @@
-local colorman = require("colorman")
+package.path = "../?.lua;"..package.path
+
+local colorman = require("lj2color.colorman")
 
 local function printColorValue(cv)
 	--print(cv.name)
@@ -46,7 +48,7 @@ end
 --testColorNameMatch("gray")
 --testColorNameMatch("white")
 --testColorNameMatch("vio")
---testColorNameMatch("yellow")
+testColorNameMatch("yellow")
 --testNameMatch("yellow", "crayola")
-testColorByValue()
+--testColorByValue()
 

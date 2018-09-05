@@ -1,26 +1,14 @@
 --[[
 Copyright 2015 William A Adams
-
-Licensed under the Apache License, Version 2.0 (the "License");
-you may not use this file except in compliance with the License.
-You may obtain a copy of the License at
-
-http ://www.apache.org/licenses/LICENSE-2.0
-
-Unless required by applicable law or agreed to in writing, software
-distributed under the License is distributed on an "AS IS" BASIS,
-WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-See the License for the specific language governing permissions and
-limitations under the License.
 --]]
 
-local colordb = require("allcolors");
+local colordb = require("lj2color.allcolors");
 local math = require("math")
 local acos = math.acos
 local abs = math.abs
 
--- convert color with components 0-255 and convert to
--- color based on 0.0 - 1.0
+-- convert color with components ranging from 0-255 
+-- to components with range 0.0 - 1.0
 function normrgba(c,a)
 	return {c[1]/255, c[2]/255, c[3]/255, a};
 end
@@ -36,10 +24,22 @@ local function dot(A,B)
 	return A[1]*B[1]+A[2]*B[2]+A[3]*B[3];
 end
 
+--[[
+	If we assume color can be represented as vectors,
+	then taking an angle between two of them is an indicator
+	as to how close they are to each other.
+
+	This is useful in the case where you're trying to do color
+	matching.  Just run through a number of possible colors, and
+	the one with the smallest angle from your sample is the
+	closest match.
+
+	Θ = acos(A · B)
+	where 	normalize A
+			normalize B
+]]
 local function angleBetweenColors(A, B)
---Θ = acos(A · B)
-	-- normalize A
-	-- normalize B
+
 	local a = normalize(A)
 	local b = normalize(B)
 	local angle = acos(dot(a,b))
@@ -47,9 +47,12 @@ local function angleBetweenColors(A, B)
 	return angle
 end
 
---
--- Convert to luminance using ITU-R Recommendation BT.709 (CCIR Rec. 709)
--- This is the one that matches modern HDTV and LCD monitors
+--[[
+	Convert to luminance using ITU-R Recommendation BT.709 (CCIR Rec. 709)
+	This is the one that matches modern HDTV and LCD monitors
+	This is a simple 'grayscale' conversion
+--]]
+
 local function lumaBT709(c)
 	local gray = 0.2125 * c[1] + 0.7154 * c[2] + 0.0721 * c[3]
 
@@ -82,9 +85,17 @@ function getColorByName(name)
 	return colors;
 end
 
--- Find close matches based on the color value
--- use both the angle between two colors (hue)
--- and the lightness (luma)
+--[[
+	To find a matching color, we use two techniques.
+	First, we use the angleBetweenColors, as this will
+	tell us whether the colors are close in hue.
+	Second, we use the luma, because it will tell us 
+	whether they are close in brightness.
+
+	You could of course just compare using one or the other,
+	depending on what kind of matching you want to do, but
+	this is generically what we do here.
+--]]
 local function matchColorByValue(color, db, dbname)
 	local colors = {}
 	local colorluma = lumaBT709(color)
@@ -104,7 +115,6 @@ end
 function getColorByValue(color)
 	local colors = {}
 
-
 	insertdictionary(colors, matchColorByValue(color, colordb.resene, "resene"))
 	insertdictionary(colors, matchColorByValue(color, colordb.crayola, "crayola"))
 	insertdictionary(colors, matchColorByValue(color, colordb.hollasch, "hollasch"))
@@ -119,10 +129,7 @@ end
 function matchColorByName(pattern, db, dbname)
 	local colors = {}
 
-	--print("matchColorByName: ", pattern, db, #db)
-
 	for name, color in pairs(db) do
-		--print("Name: ", name)
 		if name:lower():find(pattern) then
 			table.insert(colors, {dbname=dbname, name=name, color=color})
 		end
