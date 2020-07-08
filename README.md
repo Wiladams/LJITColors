@@ -22,3 +22,7 @@ looking up a color name, based on the component values:
 looking up a color by name:
 
 	local found = getColorLikeName("cornsilk")
+	
+Giant Color Dictionary
+----------------------
+http://people.csail.mit.edu/jaffer/Color/Dictionaries.html
